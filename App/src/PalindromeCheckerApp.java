@@ -1,39 +1,46 @@
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
-public class PalindromeCheckerApp {
+public class PalindromeCheckerApp{
+    public static void main(String[] args){
+        System.out.println("Welcome to Palindrome Checker Mangement System");
+        System.out.println("Version : 1.0");
+        System.out.println("System Initialized Successfully.");
 
-    public static boolean isPalindrome(String str) {
-        // Optional: remove spaces and make lowercase
-        str = str.replaceAll("\\s+", "").toLowerCase();
 
-        Stack<Character> stack = new Stack<>();
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter a string: ");
+        String input = sc.nextLine();
+
+        // Convert to lowercase and remove spaces for better checking
+        String str = input.replaceAll("\\s+", "").toLowerCase();
+
+        // Create Queue and Stack
         Queue<Character> queue = new LinkedList<>();
+        Stack<Character> stack = new Stack<>();
 
-        // Add characters to both stack and queue
-        for (char ch : str.toCharArray()) {
-            stack.push(ch);
-            queue.add(ch);
+        // Step 1 & 2: Enqueue and Push characters
+        for (int i = 0; i < str.length(); i++) {
+            queue.add(str.charAt(i));   // enqueue
+            stack.push(str.charAt(i));  // push
         }
 
-        // Compare elements
-        while (!stack.isEmpty()) {
-            if (!stack.pop().equals(queue.remove())) {
-                return false;
+        // Step 3: Compare dequeue vs pop
+        boolean isPalindrome = true;
+
+        while (!queue.isEmpty()) {
+            if (!queue.remove().equals(stack.pop())) {
+                isPalindrome = false;
+                break;
             }
         }
 
-        return true;
-    }
+        // Result
+        if (isPalindrome)
+            System.out.println("Palindrome");
+        else
+            System.out.println("Not a Palindrome");
 
-    public static void main(String[] args) {
-        String input = "civic";
-
-        if (isPalindrome(input)) {
-            System.out.println(input + " is a palindrome.");
-        } else {
-            System.out.println(input + " is not a palindrome.");
-        }
+        sc.close();
     }
 }
