@@ -1,46 +1,60 @@
 
-public class PalindromeCheckerApp {
+import java.util.Scanner;
+import java.util.Stack;
 
-    public static boolean isPalindrome(String str) {
+// PalindromeChecker class encapsulates palindrome logic
+class PalindromeChecker {
 
-        int left = 0;
-        int right = str.length() - 1;
+    // Public method to check palindrome
+    public boolean checkPalindrome(String input) {
 
-        while (left < right) {
+        if (input == null) {
+            return false;
+        }
 
-            // Skip spaces on left
-            if (str.charAt(left) == ' ') {
-                left++;
-                continue;
-            }
+        // Normalize string: remove non-alphanumeric & convert to lowercase
+        String cleaned = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
 
-            // Skip spaces on right
-            if (str.charAt(right) == ' ') {
-                right--;
-                continue;
-            }
+        Stack<Character> stack = new Stack<>();
 
-            // Compare ignoring case
-            if (Character.toLowerCase(str.charAt(left)) !=
-                    Character.toLowerCase(str.charAt(right))) {
+        // Push all characters into stack
+        for (int i = 0; i < cleaned.length(); i++) {
+            stack.push(cleaned.charAt(i));
+        }
+
+        // Compare original and reversed (using stack)
+        for (int i = 0; i < cleaned.length(); i++) {
+            if (cleaned.charAt(i) != stack.pop()) {
                 return false;
             }
-
-            left++;
-            right--;
         }
 
         return true;
     }
+}
+
+// Main Application Class
+public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String input = "A man a plan a canal Panama";
+        Scanner scanner = new Scanner(System.in);
+        PalindromeChecker checker = new PalindromeChecker();
 
-        if (isPalindrome(input)) {
-            System.out.println("Palindrome");
+        System.out.println("=== Palindrome Checker App (UC11 - OOPS) ===");
+        System.out.print("Enter a string to check: ");
+
+        String input = scanner.nextLine();
+
+        boolean result = checker.checkPalindrome(input);
+
+        if (result) {
+            System.out.println("Result: The given string IS a palindrome.");
         } else {
-            System.out.println("Not a Palindrome");
+            System.out.println("Result: The given string is NOT a palindrome.");
         }
+
+        scanner.close();
     }
 }
+
