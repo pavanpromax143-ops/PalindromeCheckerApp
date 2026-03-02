@@ -1,46 +1,73 @@
-import java.util.*;
 
-public class PalindromeCheckerApp{
-    public static void main(String[] args){
-        System.out.println("Welcome to Palindrome Checker Mangement System");
-        System.out.println("Version : 1.0");
-        System.out.println("System Initialized Successfully.");
+public  class PalindromeCheckerApp{
 
+    static class Node {
+        char data;
+        Node next;
 
-        Scanner sc = new Scanner(System.in);
+        Node(char data) {
+            this.data = data;
+        }
+    }
 
-        System.out.print("Enter a string: ");
-        String input = sc.nextLine();
+    static Node left; // Pointer to move from start
 
-        // Convert to lowercase and remove spaces for better checking
-        String str = input.replaceAll("\\s+", "").toLowerCase();
+    public static boolean isPalindrome(Node head) {
+        left = head;
+        return checkPalindrome(head);
+    }
 
-        // Create Queue and Stack
-        Queue<Character> queue = new LinkedList<>();
-        Stack<Character> stack = new Stack<>();
-
-        // Step 1 & 2: Enqueue and Push characters
-        for (int i = 0; i < str.length(); i++) {
-            queue.add(str.charAt(i));   // enqueue
-            stack.push(str.charAt(i));  // push
+    private static boolean checkPalindrome(Node right) {
+        if (right == null) {
+            return true;
         }
 
-        // Step 3: Compare dequeue vs pop
-        boolean isPalindrome = true;
-
-        while (!queue.isEmpty()) {
-            if (!queue.remove().equals(stack.pop())) {
-                isPalindrome = false;
-                break;
-            }
+        // Recursively go to end
+        boolean isPal = checkPalindrome(right.next);
+        if (!isPal) {
+            return false;
         }
 
-        // Result
-        if (isPalindrome)
-            System.out.println("Palindrome");
-        else
-            System.out.println("Not a Palindrome");
+        // Compare left and right
+        if (left.data != right.data) {
+            return false;
+        }
 
-        sc.close();
+        // Move left pointer forward
+        left = left.next;
+
+        return true;
+    }
+
+    // Helper method to append nodes
+    public static Node append(Node head, char data) {
+        Node newNode = new Node(data);
+
+        if (head == null) {
+            return newNode;
+        }
+
+        Node temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+
+        temp.next = newNode;
+        return head;
+    }
+
+    public static void main(String[] args) {
+        Node head = null;
+        String input = "madam";
+
+        for (char ch : input.toCharArray()) {
+            head = append(head, ch);
+        }
+
+        if (isPalindrome(head)) {
+            System.out.println("madam is a palindrome.");
+        } else {
+            System.out.println("madam List is not a palindrome.");
+        }
     }
 }
